@@ -1,1 +1,210 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Kanit";
+  font-size: 18px;
+}
+
+.bggreen {
+  background-color: greenyellow;
+}
+.bgyellow {
+  background-color: yellow;
+}
+.bgred {
+  background-color: red;
+}
+.horiline {
+  color: #000;
+}
+hr {
+  display: block;
+  height: 2px;
+  border: 0;
+  border-top: 2px solid black;
+  margin: 1em 0;
+  padding: 0;
+}
+main {
+  font-size: 30px;
+}
+.tb1 {
+  font-size: 30px;
+  text-align: center;
+}
+input {
+  width: 40px;
+}
+.yellow {
+  color: yellow;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.blue {
+  color: blue;
+}
+
+.orange-bg {
+  background-color: orange;
+  color: #000000;
+}
+
+.blue-bg {
+  background-color: blue;
+  color: #FFFFFF;
+}
+
+.green-bg {
+  background-color: greenyellow;
+  color: #000000;
+}
+
+.red-bg {
+  background-color: red;
+  color: #FFFFFF;
+}
+
+.cancel-bg {
+  background-color: yellow;
+  color: #000000;
+}
+
+.black-bg {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.page {
+  justify-content: center;
+  align-items: center;
+  height: 10px;
+  width: 100%;
+  color: #ffffff;
+  background-color: #2d2d2d;
+  text-align: center;
+  font-size: 30px  !important;
+  font-weight: bold;
+}
+
+#report {
+  padding: 0px 0px 40px 0px;
+}
+
+#report .report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0px;
+}
+
+#report .report-header div {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+#report .report-body {
+}
+
+#report-table {
+  width: 100%;
+}
+
+#report-table thead tr th {
+  background: #e9e9e9;
+  font-size: 26px;
+  padding: 10px;
+}
+
+#report-table tbody tr.complete {
+  background: greenyellow;
+  color: #000000;
+}
+
+#report-table tbody tr.wait {
+  background: white;
+  color: #000000;
+}
+
+#report-table tbody tr.waitc {
+  background: orange;
+  color: #000000;
+}
+
+#report-table tbody tr.cancel {
+  background: yellow;
+  color: #000000;
+}
+
+#report-table tbody tr.delay {
+  background: red;
+  color: #000000;
+}
+
+#report-table tbody tr td {
+  font-size: 25px;
+  padding: 5px;
+}
+
+.summary-lists {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px 0px;
+}
+
+.summary-lists .summary-item {
+  width: calc(100% / 6);
+  padding: 10px;
+}
+
+.summary-lists .summary-item .title {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.summary-lists .summary-item .count-box {
+  font-size: 50px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+#report .report-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0px;
+}
+
+#report .report-footer div {
+  font-size: 30px;
+  font-weight: bold;
+  padding: 0px 10px;
+}
+
+#report .report-footer .button-link {
+  background: #dddddd;
+  color: #000000;
+  border-radius: 10px;
+  padding: 5px 20px;
+  margin: 0px 5px;
+}
+
+#report .report-footer .button-link.acitve {
+  background: #000000;
+  color: #ffffff;
+}

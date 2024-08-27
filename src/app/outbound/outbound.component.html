@@ -1,0 +1,99 @@
+<div class="row">
+  <div class="col-12">
+    <div id="report">
+      <div class="report-header">
+        <div>ตารางแสดงเวลาจัดส่งชิ้นงานจาก VENDOR -> SANKO</div>
+        <div>{{ timer | date : "dd/MM/yyyy hh:mm:ss" }}</div>
+      </div>
+      <div class="report-body">
+        <table id="report-table" class="">
+          <thead>
+            <tr>
+              <th class="text-center">เวลา</th>
+              <th class="">บริษัท</th>
+              <th class="">คนขับ</th>
+              <th class="text-center">ทะเบียนรถ</th>
+              <th class="">สินค้า</th>
+              <th class="text-center">จำนวน/บรรจุ</th>
+              <th class="text-center">หน่วยนับ</th>
+              <th class="text-center">สถานะ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let schedule of paginatedData"
+              [ngClass]="{
+                'wait': schedule.VDB_STATUS === '1',
+                'waitc': schedule.VDB_STATUS === '2',
+                'complete': schedule.VDB_STATUS === '3',
+                'delay': schedule.VDB_STATUS === '4',
+                'cancel': schedule.VDB_STATUS === '5'
+              }"
+            >
+              <td class="text-center">{{ schedule.DISPLAY_TIME }}</td>
+              <td class="">
+                {{ schedule.VDB_COMP }}
+              </td>
+              <td class="">{{ schedule.VDB_DRIVER }}</td>
+              <td class="text-center">{{ schedule.VDB_CAR }}</td>
+              <td class="">
+                {{ schedule.VDB_ITEM }}
+              </td>
+              <td class="text-center">
+                {{ schedule.VDB_QTY | number }}
+              </td>
+              <td class="text-center">
+                {{ schedule.VDB_UM }}
+              </td>
+              <td class="text-center">
+                <div *ngIf="schedule.VDB_STATUS === '1'">WAIT</div>
+                <div *ngIf="schedule.VDB_STATUS === '2'">WAITC</div>
+                <div *ngIf="schedule.VDB_STATUS === '3'">COMPLETE</div>
+                <div *ngIf="schedule.VDB_STATUS === '4'">DELAY</div>
+                <div *ngIf="schedule.VDB_STATUS === '5'">CANCEL</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="h-5 h2 text-center page" colspan="8">
+                Page {{ currentPage + 1 }}/{{ totalPages }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="summary-lists">
+          <div class="summary-item">
+            <div class="title">Total</div>
+            <div class="count-box black-bg">{{ totalCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Wait</div>
+            <div class="count-box blue-bg">{{ waitCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Wait(C)</div>
+            <div class="count-box orange-bg">{{ waitCCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Complete</div>
+            <div class="count-box green-bg">{{ completeCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Delay</div>
+            <div class="count-box red-bg">{{ delayCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Cancel</div>
+            <div class="count-box cancel-bg">{{ cancelCount }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="report-footer">
+        <div>เลือกหน้า</div>
+        <div>
+          <a routerLink="/" class="button-link">SANKO -> VENDOR </a>
+          <a routerLink="/outbound" class="button-link acitve">VENDOR -> SANKO </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
