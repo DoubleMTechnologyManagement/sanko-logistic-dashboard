@@ -126,31 +126,6 @@ input {
   padding: 10px;
 }
 
-#report-table tbody tr.complete {
-  background: greenyellow;
-  color: #000000;
-}
-
-#report-table tbody tr.wait {
-  background: white;
-  color: #000000;
-}
-
-#report-table tbody tr.waitc {
-  background: orange;
-  color: #000000;
-}
-
-#report-table tbody tr.cancel {
-  background: yellow;
-  color: #000000;
-}
-
-#report-table tbody tr.delay {
-  background: red;
-  color: #000000;
-}
-
 #report-table tbody tr td {
   font-size: 25px;
   padding: 5px;
@@ -241,8 +216,32 @@ input {
 }
 
 #company-information .status {
-  background-color: green;
   padding: 10px;
   font-size: 25px;
   font-weight: bold;
+}
+
+#company-information .status.complete {
+  background: greenyellow;
+  color: #000000;
+}
+
+#company-information .status.wait {
+  background: white;
+  color: #000000;
+}
+
+#company-information .status.waitc {
+  background: orange;
+  color: #000000;
+}
+
+#company-information .status.cancel {
+  background: yellow;
+  color: #000000;
+}
+
+#company-information .status.delay {
+  background: red;
+  color: #000000;
 }

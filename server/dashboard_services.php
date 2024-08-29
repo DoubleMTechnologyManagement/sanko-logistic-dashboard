@@ -66,5 +66,17 @@ ORDER BY
     oci_free_statement($objParse);
     return $result;
   }
+
+  public function updateStatus(){
+    $sql = "update set vdb_status = '4' from vdb_det where ";
+    $objParse = oci_parse($this->conn, $sql);
+    oci_execute($objParse, OCI_DEFAULT);
+    $result;
+    while ($row = oci_fetch_assoc($objParse)) {
+        $result = (object) $row;
+    }
+    oci_free_statement($objParse);
+    return $result;
+  }
 }
 ?>

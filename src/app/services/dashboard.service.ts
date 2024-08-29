@@ -31,13 +31,15 @@ export interface CompanyData {
   VDB_DRIVER: string;
   VDB_CAR: string;
   VDB_STATUS: string;
+  DISPLAY_TIME: string;
   items: Array<{
-    DISPLAY_TIME: string;
     VDB_ITEM: string;
     PRODUCT_NAME: string;
     VDB_QTY: number;
     VDB_UM: string;
   }>;
+  totalPages: number;
+  currentPage: number;
 }
 
 export interface VdbDet {

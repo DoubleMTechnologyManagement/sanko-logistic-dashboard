@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DashboardService, VdbDet } from '../services/dashboard.service';
+import { CompanyData, DashboardService, VdbDet } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-outbound',
@@ -10,31 +10,24 @@ import { DashboardService, VdbDet } from '../services/dashboard.service';
   providers: [DatePipe],
 })
 export class OutboundComponent {
-  scheduleData: VdbDet[] = [];
-  paginatedData: VdbDet[] = [];
+  allCompaniesData: CompanyData[] = [];
+  currentCompany: CompanyData | null = null;
+  currentPage: number = 0;
+  totalPages: number = 0;
+  paginatedData: CompanyData['items'] = [];
   intervalSchedule: any;
   intervalDateTime: any;
-  rxTime = new Date();
   subscription: Subscription = new Subscription();
   timer: Date = new Date();
-  totalCount: number = 0;
-  waitCount: number = 0;
-  waitCCount: number = 0;
-  delayCount: number = 0;
-  completeCount: number = 0;
-  cancelCount: number = 0;
-  setTime: number = 30000; 
-  setTimeRefreshNextPage: number = 10000; 
-
-  currentPage: number = 0;
+  setTime: number = 30000;
+  setTimeRefreshNextPage: number = 10000;
   itemsPerPage: number = 10;
-  totalPages: number = 1;
+  currentCompanyIndex: number = 0;
 
   constructor(
     private apiService: DashboardService,
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef,
-    private datePipe: DatePipe
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -43,7 +36,7 @@ export class OutboundComponent {
       this.startIntervals();
     }).catch(error => {
       console.error('Failed to get set time:', error);
-      this.startIntervals(); 
+      this.startIntervals();
     });
     this.startIntervalsNextPage();
   }
@@ -53,7 +46,9 @@ export class OutboundComponent {
       const subscription = this.apiService.getSetTime().subscribe({
         next: (data) => {
           if (data && data.WOC_VD_OUT) {
-            this.setTime = parseInt(data.WOC_VD_OUT, 10) * 1000; 
+            this.setTime = parseInt(data.WOC_VD_OUT, 10) * 1000;
+          } else {
+            this.setTime = 30000;
           }
           resolve();
         },
@@ -69,10 +64,10 @@ export class OutboundComponent {
   callApi() {
     const apiSubscription = this.apiService.getEmployee().subscribe({
       next: (data) => {
-        this.scheduleData = data.filter((item: VdbDet) => item.VDB_TYPE === 'VD->SDT');
-        this.totalCount = this.scheduleData.length;
-        this.totalPages = Math.ceil(this.totalCount / this.itemsPerPage);
-        this.calculateCounts();
+        const result = data.filter((item: VdbDet) => item.VDB_TYPE === 'VD->SDT');
+        this.groupDataByCompanyAndTime(result);
+        this.resetPagination();
+        this.updatePaginatedData();
       },
       error: (error) => {
         console.error('API Error:', error);
@@ -81,18 +76,68 @@ export class OutboundComponent {
     this.subscription.add(apiSubscription);
   }
 
-  calculateCounts() {
-    this.waitCount = this.scheduleData.filter(item => item.VDB_STATUS === "1").length;
-    this.waitCCount = this.scheduleData.filter(item => item.VDB_STATUS === "2").length;
-    this.completeCount = this.scheduleData.filter(item => item.VDB_STATUS === "3").length;
-    this.delayCount = this.scheduleData.filter(item => item.VDB_STATUS === "4").length;
-    this.cancelCount = this.scheduleData.filter(item => item.VDB_STATUS === "5").length;
+  groupDataByCompanyAndTime(data: VdbDet[]) {
+    const companyMap: { [key: string]: CompanyData } = {};
+
+    data.forEach(item => {
+        const groupKey = `${item.VDB_COMP}-${item.DISPLAY_TIME}`;
+        if (!companyMap[groupKey]) {
+            companyMap[groupKey] = {
+                VDB_COMP: item.VDB_COMP,
+                VDB_DRIVER: item.VDB_DRIVER,
+                VDB_CAR: item.VDB_CAR,
+                VDB_STATUS: item.VDB_STATUS,
+                DISPLAY_TIME: item.DISPLAY_TIME,
+                items: [],
+                totalPages: 1,
+                currentPage: 0
+            };
+        }
+        companyMap[groupKey].items.push({
+            VDB_ITEM: item.VDB_ITEM,
+            PRODUCT_NAME: item.PRODUCT_NAME,
+            VDB_QTY: item.VDB_QTY,
+            VDB_UM: item.VDB_UM
+        });
+    });
+
+    this.allCompaniesData = Object.values(companyMap);
+    this.totalPages = 0;
+    this.allCompaniesData.forEach(company => {
+        company.totalPages = Math.ceil(company.items.length / this.itemsPerPage);
+        this.totalPages += company.totalPages; 
+    });
+  }
+
+  resetPagination() {
+    this.currentCompanyIndex = 0;
+    this.allCompaniesData.forEach(company => {
+      company.currentPage = 0;
+    });
   }
 
   updatePaginatedData() {
-    const start = this.currentPage * this.itemsPerPage;
-    const end = start + this.itemsPerPage;
-    this.paginatedData = this.scheduleData.slice(start, end);
+    if (this.allCompaniesData.length > 0) {
+        let pageIndex = this.currentPage;
+        let accumulatedPages = 0;
+
+        for (const company of this.allCompaniesData) {
+            const companyPages = Math.ceil(company.items.length / this.itemsPerPage);
+            accumulatedPages += companyPages;
+
+            if (pageIndex < accumulatedPages) {
+                const companyPageIndex = pageIndex - (accumulatedPages - companyPages);
+                const start = companyPageIndex * this.itemsPerPage;
+                const end = start + this.itemsPerPage;
+                this.paginatedData = company.items.slice(start, end);
+                this.currentCompany = company;
+                break;
+            }
+        }
+    } else {
+        this.paginatedData = [];
+        this.currentCompany = null;
+    }
   }
 
   startIntervals() {
@@ -111,16 +156,16 @@ export class OutboundComponent {
 
   startIntervalsNextPage() {
     this.ngZone.runOutsideAngular(() => {
-      this.intervalSchedule = setInterval(() => {
-        this.currentPage = (this.currentPage + 1) % this.totalPages;
-        this.updatePaginatedData();
-        this.cdr.detectChanges();
-      }, this.setTimeRefreshNextPage);
+        this.intervalSchedule = setInterval(() => {
+            if (this.currentPage + 1 < this.totalPages) {
+                this.currentPage++;
+            } else {
+                this.currentPage = 0;
+            }
 
-      this.intervalDateTime = setInterval(() => {
-        this.timer = new Date();
-        this.cdr.detectChanges();
-      }, 1000);
+            this.updatePaginatedData();
+            this.cdr.detectChanges();
+        }, this.setTimeRefreshNextPage);
     });
   }
 
@@ -128,7 +173,6 @@ export class OutboundComponent {
     if (this.intervalSchedule) {
       clearInterval(this.intervalSchedule);
     }
-
     if (this.intervalDateTime) {
       clearInterval(this.intervalDateTime);
     }
