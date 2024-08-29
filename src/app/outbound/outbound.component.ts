@@ -45,6 +45,7 @@ export class OutboundComponent {
       console.error('Failed to get set time:', error);
       this.startIntervals(); 
     });
+    this.startIntervalsNextPage();
   }
 
   getSetTime(): Promise<void> {
@@ -71,7 +72,6 @@ export class OutboundComponent {
         this.scheduleData = data.filter((item: VdbDet) => item.VDB_TYPE === 'VD->SDT');
         this.totalCount = this.scheduleData.length;
         this.totalPages = Math.ceil(this.totalCount / this.itemsPerPage);
-        this.startIntervalsNextPage();
         this.calculateCounts();
       },
       error: (error) => {

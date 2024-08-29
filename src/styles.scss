@@ -208,3 +208,41 @@ input {
   background: #000000;
   color: #ffffff;
 }
+
+#company-information {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 0px 15px 0px;
+}
+
+#company-information .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+#company-information .company-name {
+  background-color: darkgrey;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+#company-information .value {
+  font-size: 25px;
+  font-weight: normal;
+}
+
+#company-information .title {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+#company-information .status {
+  background-color: green;
+  padding: 10px;
+  font-size: 25px;
+  font-weight: bold;
+}

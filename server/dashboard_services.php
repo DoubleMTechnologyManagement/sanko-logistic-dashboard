@@ -31,13 +31,18 @@ class dashboard {
     vdb_num03,
     vdb_date01,
     vdb_date02,
-    vdb_date03
-    FROM 
-        vdb_det 
-    WHERE 
-        TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr') 
-    ORDER BY 
-    TO_CHAR(vdb_date, 'HH24:MI'), vdb_nbr "; // Removed the semicolon here
+    vdb_date03,
+    pt_mstr.pt_desc1 AS PRODUCT_NAME
+FROM 
+    vdb_det
+JOIN 
+    pt_mstr ON vdb_det.vdb_item = pt_mstr.pt_part 
+WHERE 
+    TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr')
+ORDER BY 
+    vdb_status,
+    TO_CHAR(vdb_date, 'HH24.MI'), 
+    vdb_nbr"; 
 
     $objParse = oci_parse($this->conn, $sql);
     oci_execute($objParse, OCI_DEFAULT);
@@ -50,7 +55,8 @@ class dashboard {
 }
 
   public function setTime(){
-    $sql = "SELECT WOC_VD_IN, WOC_VD_OUT FROM WOC_CTRL";
+    $sql = "SELECT WOC_VD_IN, WOC_VD_OUT, WOC_VD_DELAY 
+    FROM WOC_CTRL where WOC_VD_DELAY is not null  or WOC_VD_IN is not null  or WOC_VD_OUT is not null";
     $objParse = oci_parse($this->conn, $sql);
     oci_execute($objParse, OCI_DEFAULT);
     $result;

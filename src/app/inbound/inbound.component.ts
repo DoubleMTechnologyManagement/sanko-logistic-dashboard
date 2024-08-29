@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, NgZone, ChangeDetectorRef, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DashboardService, VdbDet } from '../services/dashboard.service';
+import { CompanyData, DashboardService, VdbDet } from '../services/dashboard.service';
+
 
 @Component({
   selector: 'app-inbound',
@@ -23,8 +24,8 @@ export class InboundComponent implements OnInit, OnDestroy {
   delayCount: number = 0;
   completeCount: number = 0;
   cancelCount: number = 0;
-  setTime: number = 30000;
-  setTimeRefreshNextPage: number = 10000;
+  setTime: number = 30000; 
+  setTimeRefreshNextPage: number = 10000; 
 
   currentPage: number = 0;
   itemsPerPage: number = 10;
@@ -45,6 +46,7 @@ export class InboundComponent implements OnInit, OnDestroy {
       console.error('Failed to get set time:', error);
       this.startIntervals(); 
     });
+    this.startIntervalsNextPage();
   }
 
   getSetTime(): Promise<void> {
@@ -52,9 +54,7 @@ export class InboundComponent implements OnInit, OnDestroy {
       const subscription = this.apiService.getSetTime().subscribe({
         next: (data) => {
           if (data && data.WOC_VD_IN) {
-            this.setTime = parseInt(data.WOC_VD_IN, 10) * 1000;
-          } else {
-            this.setTime = 30000;
+            this.setTime = parseInt(data.WOC_VD_IN, 10) * 1000; 
           }
           resolve();
         },
@@ -73,7 +73,6 @@ export class InboundComponent implements OnInit, OnDestroy {
         this.scheduleData = data.filter((item: VdbDet) => item.VDB_TYPE === 'SDT->VD');
         this.totalCount = this.scheduleData.length;
         this.totalPages = Math.ceil(this.totalCount / this.itemsPerPage);
-        this.startIntervalsNextPage();
         this.calculateCounts();
       },
       error: (error) => {

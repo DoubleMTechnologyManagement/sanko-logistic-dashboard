@@ -26,6 +26,20 @@ export interface SetTime {
   WOC_VD_OUT: string;
 }
 
+export interface CompanyData {
+  VDB_COMP: string;
+  VDB_DRIVER: string;
+  VDB_CAR: string;
+  VDB_STATUS: string;
+  items: Array<{
+    DISPLAY_TIME: string;
+    VDB_ITEM: string;
+    PRODUCT_NAME: string;
+    VDB_QTY: number;
+    VDB_UM: string;
+  }>;
+}
+
 export interface VdbDet {
   VDB_TYPE: string;
   VDB_NBR: string;
@@ -35,6 +49,7 @@ export interface VdbDet {
   VDB_DRIVER: string;
   VDB_CAR: string;
   VDB_ITEM: string;
+  PRODUCT_NAME: string;
   VDB_QTY: number;
   VDB_UM: string;
   VDB_STATUS: string;
@@ -51,4 +66,3 @@ export interface VdbDet {
   VDB_DATE03: Date;
   DISPLAY_TIME: string;
 }
-
