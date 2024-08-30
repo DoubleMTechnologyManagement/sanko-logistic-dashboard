@@ -22,6 +22,7 @@ $func = new dashboard();
 switch($req["mod"]) {
     case "scheduleData": $data = $func->scheduleData(); break;
     case "setTime": $data = $func->setTime(); break;
+    case "updateStatus": $data = $func->updateStatus($req['data']); break;
     default: $data["message"] = "Not found!"; break; 
 }
 

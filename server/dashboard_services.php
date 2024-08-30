@@ -68,16 +68,26 @@ ORDER BY
     return $result;
   }
 
-  public function updateStatus(){
-    $sql = "update set vdb_status = '4' from vdb_det where ";
+  public function updateStatus($data) {
+    $sql = "UPDATE vdb_det 
+            SET vdb_status = '4' 
+            WHERE vdb_status IN ('1', '2')
+            AND VDB_COMP = :VDB_COMP 
+            AND VDB_DRIVER = :VDB_DRIVER 
+            AND VDB_CAR = :VDB_CAR 
+            AND VDB_NBR = :VDB_NBR
+            AND TO_CHAR(vdb_date, 'HH24.MI') = :VDB_DATE";
     $objParse = oci_parse($this->conn, $sql);
-    oci_execute($objParse, OCI_DEFAULT);
-    $result;
-    while ($row = oci_fetch_assoc($objParse)) {
-        $result = (object) $row;
-    }
+    oci_bind_by_name($objParse, ':VDB_COMP', $data['VDB_COMP']);
+    oci_bind_by_name($objParse, ':VDB_DRIVER', $data['VDB_DRIVER']);
+    oci_bind_by_name($objParse, ':VDB_CAR', $data['VDB_CAR']);
+    oci_bind_by_name($objParse, ':VDB_NBR', $data['VDB_NBR']);
+    oci_bind_by_name($objParse, ':VDB_DATE', $data['VDB_DATE']);
+    $result = oci_execute($objParse, OCI_DEFAULT);
+    oci_commit($this->conn);
     oci_free_statement($objParse);
+
     return $result;
-  }
+}
 }
 ?>

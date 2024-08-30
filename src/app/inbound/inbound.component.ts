@@ -29,6 +29,7 @@ export class InboundComponent implements OnInit, OnDestroy {
   delayCount: number = 0;
   completeCount: number = 0;
   cancelCount: number = 0;
+  delayInMinutes: number = 0;
 
   constructor(
     private apiService: DashboardService,
@@ -53,6 +54,11 @@ export class InboundComponent implements OnInit, OnDestroy {
         next: (data) => {
           if (data && data.WOC_VD_IN) {
             this.setTime = parseInt(data.WOC_VD_IN, 10) * 1000;
+            if(data.WOC_VD_DELAY) {
+              this.delayInMinutes = parseInt(data.WOC_VD_DELAY);
+            } else {
+              this.delayInMinutes = 0;
+            }
           } else {
             this.setTime = 30000;
           }
@@ -104,6 +110,7 @@ export class InboundComponent implements OnInit, OnDestroy {
                 VDB_STATUS: item.VDB_STATUS,
                 DISPLAY_TIME: item.DISPLAY_TIME,
                 VDB_NBR: item.VDB_NBR,
+                VDB_DATE: item.VDB_DATE,
                 items: [],
                 totalPages: 1,
                 currentPage: 0
@@ -125,6 +132,25 @@ export class InboundComponent implements OnInit, OnDestroy {
         this.totalPages += company.totalPages; 
     });
     this.calculateTotalCount(this.allCompaniesData);
+  }
+
+  updateStatus(data: CompanyData[]) {
+    data.forEach(company => {
+      if (company.DISPLAY_TIME) {
+        const currentTime = new Date();
+        const [hours, minutes] = company.DISPLAY_TIME.split('.').map(Number);
+        const displayTime = new Date();
+        displayTime.setHours(hours, minutes, 0, 0);
+        displayTime.setMinutes(displayTime.getMinutes() + this.delayInMinutes);
+        console.log(`displayTime: ${displayTime}, currentTime: ${currentTime}`);
+        const isOverdue = displayTime < currentTime;
+        console.log(`isOverdue: ${isOverdue}`);
+        if(isOverdue) {
+          this.apiService.update(company);
+        } 
+        console.log(`Company: ${company.VDB_COMP}, Is Overdue: ${isOverdue}`);
+      }
+    });
   }
 
   resetPagination() {
@@ -182,6 +208,7 @@ export class InboundComponent implements OnInit, OnDestroy {
             }
 
             this.updatePaginatedData();
+            this.updateStatus(this.allCompaniesData);
             this.cdr.detectChanges();
         }, this.setTimeRefreshNextPage);
     });

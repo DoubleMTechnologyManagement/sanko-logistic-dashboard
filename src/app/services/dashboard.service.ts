@@ -6,17 +6,37 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class DashboardService {
+
+  API_URL = 'http://192.168.1.204/dashboard_vdout/dashboard.php';
+
   constructor(private httpClient: HttpClient) {}
 
   getEmployee(): Observable<VdbDet[]> {
-    return this.httpClient.post<VdbDet[]>('http://192.168.1.204/dashboard_vdout/dashboard.php', {
+    return this.httpClient.post<VdbDet[]>(this.API_URL, {
       mod: 'scheduleData'
     });
   }
 
   getSetTime(): Observable<SetTime> {
-    return this.httpClient.post<SetTime>('http://192.168.1.204/dashboard_vdout/dashboard.php', {
+    return this.httpClient.post<SetTime>(this.API_URL, {
       mod: 'setTime'
+    });
+  }
+
+  update(company: CompanyData): void {
+    this.httpClient.post<SetTime>(this.API_URL, {
+      mod: 'updateStatus',
+      data: {
+        VDB_COMP: company.VDB_COMP,
+        VDB_DRIVER: company.VDB_DRIVER,
+        VDB_CAR: company.VDB_CAR,
+        VDB_NBR: company.VDB_NBR,
+        VDB_DATE: company.VDB_DATE 
+      }
+    }).subscribe(response => {
+      console.log('Status updated:', response);
+    }, error => {
+      console.error('Error updating status:', error);
     });
   }
 }
@@ -24,6 +44,7 @@ export class DashboardService {
 export interface SetTime {
   WOC_VD_IN: string;
   WOC_VD_OUT: string;
+  WOC_VD_DELAY: string;
 }
 
 export interface CompanyData {
@@ -32,6 +53,7 @@ export interface CompanyData {
   VDB_CAR: string;
   VDB_STATUS: string;
   DISPLAY_TIME: string;
+  VDB_DATE: Date;
   VDB_NBR: string;
   items: Array<{
     VDB_ITEM: string;
