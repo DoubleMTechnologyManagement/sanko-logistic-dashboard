@@ -42,7 +42,10 @@ WHERE
     TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr')
 ORDER BY 
     vdb_status,
-    TO_CHAR(vdb_date, 'HH24.MI'), 
+    CASE 
+        WHEN REGEXP_LIKE(TO_CHAR(vdb_date, 'HH24:MI'), '^\d{2}:\d{2}$') THEN TO_CHAR(vdb_date, 'HH24:MI')
+        ELSE TO_CHAR(vdb_date, 'HH24.MI')
+    END, 
     vdb_nbr"; 
 
     $objParse = oci_parse($this->conn, $sql);
@@ -69,25 +72,75 @@ ORDER BY
   }
 
   public function updateStatus($data) {
-    $sql = "UPDATE vdb_det 
-            SET vdb_status = '4' 
-            WHERE vdb_status IN ('1', '2')
-            AND VDB_COMP = :VDB_COMP 
-            AND VDB_DRIVER = :VDB_DRIVER 
-            AND VDB_CAR = :VDB_CAR 
-            AND VDB_NBR = :VDB_NBR
-            AND TO_CHAR(vdb_date, 'HH24.MI') = :VDB_DATE";
-    $objParse = oci_parse($this->conn, $sql);
-    oci_bind_by_name($objParse, ':VDB_COMP', $data['VDB_COMP']);
-    oci_bind_by_name($objParse, ':VDB_DRIVER', $data['VDB_DRIVER']);
-    oci_bind_by_name($objParse, ':VDB_CAR', $data['VDB_CAR']);
-    oci_bind_by_name($objParse, ':VDB_NBR', $data['VDB_NBR']);
-    oci_bind_by_name($objParse, ':VDB_DATE', $data['VDB_DATE']);
-    $result = oci_execute($objParse, OCI_DEFAULT);
-    oci_commit($this->conn);
-    oci_free_statement($objParse);
+    $fetchSql = "SELECT vdb_type,
+              vdb_nbr,
+              vdb_comp,
+              VDB_DATE,
+              TO_CHAR(vdb_date, 'HH24.MI') AS display_time,
+              vdb_effdate,
+              vdb_driver,
+              vdb_car,
+              vdb_item,
+              vdb_qty,
+              vdb_um,
+              vdb_status,
+              vdb_rmks,
+              vdb_user
+          FROM vdb_det
+                 WHERE vdb_status IN ('1', '2') 
+                 AND TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr')
+                 AND VDB_NBR = :VDB_NBR 
+                 AND VDB_TYPE = :VDB_TYPE
+                 AND TO_CHAR(vdb_date, 'HH24.MI') = :DISPLAY_TIME
+                 ";
 
-    return $result;
-}
+    $fetchParse = oci_parse($this->conn, $fetchSql);
+    oci_bind_by_name($fetchParse, ':VDB_NBR', $data['VDB_NBR']);
+    oci_bind_by_name($fetchParse, ':VDB_TYPE', $data['VDB_TYPE']);
+    oci_bind_by_name($fetchParse, ':DISPLAY_TIME', $data['DISPLAY_TIME']);
+    oci_execute($fetchParse, OCI_DEFAULT);
+
+    $fetchedData = array();
+    while ($row = oci_fetch_assoc($fetchParse)) {
+        $fetchedData[] = $row;
+    }
+    oci_free_statement($fetchParse);
+
+    $updateSql = "UPDATE vdb_det 
+                  SET vdb_status = '4' 
+                  WHERE vdb_status IN ('1', '2') 
+                 AND TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr')
+                 AND VDB_NBR = :VDB_NBR 
+                 AND VDB_TYPE = :VDB_TYPE
+                 AND TO_CHAR(vdb_date, 'HH24.MI') = :DISPLAY_TIME";
+
+    $updateParse = oci_parse($this->conn, $updateSql);
+
+    oci_bind_by_name($updateParse, ':VDB_NBR', $data['VDB_NBR']);
+    oci_bind_by_name($updateParse, ':VDB_TYPE', $data['VDB_TYPE']);
+    oci_bind_by_name($updateParse, ':DISPLAY_TIME', $data['DISPLAY_TIME']);
+    $updateResult = oci_execute($updateParse, OCI_DEFAULT);
+
+    $updateStatus = '';
+    if ($updateResult) {
+        $rowsAffected = oci_num_rows($updateParse);
+        if ($rowsAffected > 0) {
+            oci_commit($this->conn);
+            $updateStatus = 'Update successful';
+        } else {
+            $updateStatus = 'No rows updated';
+        }
+    } else {
+        $updateStatus = 'Update failed';
+    }
+
+    oci_free_statement($updateParse);
+
+    return array(
+      'fetchedData' => $fetchedData,
+      'updateStatus' => $updateStatus
+    ); 
+  }
+
 }
 ?>

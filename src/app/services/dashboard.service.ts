@@ -23,7 +23,7 @@ export class DashboardService {
     });
   }
 
-  update(company: CompanyData): void {
+  update(company: CompanyData, VDB_TYPE: String): void {
     this.httpClient.post<SetTime>(this.API_URL, {
       mod: 'updateStatus',
       data: {
@@ -31,7 +31,9 @@ export class DashboardService {
         VDB_DRIVER: company.VDB_DRIVER,
         VDB_CAR: company.VDB_CAR,
         VDB_NBR: company.VDB_NBR,
-        VDB_DATE: company.VDB_DATE 
+        VDB_DATE: company.VDB_DATE,
+        VDB_TYPE: VDB_TYPE,
+        DISPLAY_TIME: company.DISPLAY_TIME
       }
     }).subscribe(response => {
       console.log('Status updated:', response);

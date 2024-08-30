@@ -197,22 +197,36 @@ export class OutboundComponent {
 
   updateStatus(data: CompanyData[]) {
     data.forEach(company => {
-      if (company.DISPLAY_TIME) {
+      if (company.DISPLAY_TIME && (company.VDB_STATUS === '1' || company.VDB_STATUS === '2')) {
         const currentTime = new Date();
         const [hours, minutes] = company.DISPLAY_TIME.split('.').map(Number);
         const displayTime = new Date();
         displayTime.setHours(hours, minutes, 0, 0);
         displayTime.setMinutes(displayTime.getMinutes() + this.delayInMinutes);
-        console.log(`displayTime: ${displayTime}, currentTime: ${currentTime}`);
+        console.log(`Status = ${this.convertStatus(company.VDB_STATUS)} time: ${company.DISPLAY_TIME}, timeToUpdate:${displayTime} currentTime: ${currentTime}`);
         const isOverdue = displayTime < currentTime;
-        console.log(`isOverdue: ${isOverdue}`);
-        if(isOverdue) {
-          this.apiService.update(company);
-        } 
         console.log(`Company: ${company.VDB_COMP}, Is Overdue: ${isOverdue}`);
+        if(isOverdue) {
+          console.log("Need to update status");
+          this.apiService.update(company, 'VD->SDT');
+        } 
       }
     });
   }
+
+  convertStatus(status: string): string {
+    if(status === '1') {
+      return 'wait';
+    } else if(status === '2') {
+      return 'waitC';
+    } else if(status === '3') {
+      return 'complete';
+    } else if(status === '4') {
+      return 'delay';
+    } else {
+      return 'cancel';
+    }
+  } 
 
   ngOnDestroy() {
     if (this.intervalSchedule) {
