@@ -103,6 +103,7 @@ export class InboundComponent implements OnInit, OnDestroy {
                 VDB_CAR: item.VDB_CAR,
                 VDB_STATUS: item.VDB_STATUS,
                 DISPLAY_TIME: item.DISPLAY_TIME,
+                VDB_NBR: item.VDB_NBR,
                 items: [],
                 totalPages: 1,
                 currentPage: 0

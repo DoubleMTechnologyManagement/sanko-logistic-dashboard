@@ -32,6 +32,7 @@ export interface CompanyData {
   VDB_CAR: string;
   VDB_STATUS: string;
   DISPLAY_TIME: string;
+  VDB_NBR: string;
   items: Array<{
     VDB_ITEM: string;
     PRODUCT_NAME: string;
