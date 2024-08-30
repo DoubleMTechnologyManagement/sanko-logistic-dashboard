@@ -66,7 +66,7 @@ input {
 }
 
 .green-bg {
-  background-color: greenyellow;
+  background-color: green;
   color: #000000;
 }
 
@@ -129,6 +129,32 @@ input {
 #report-table tbody tr td {
   font-size: 25px;
   padding: 5px;
+}
+
+
+#report-table tbody tr.complete {
+  background: green;
+  color: #000000;
+}
+
+#report-table tbody tr.wait {
+  background: white;
+  color: #000000;
+}
+
+#report-table tbody tr.waitc {
+  background: orange;
+  color: #000000;
+}
+
+#report-table tbody tr.cancel {
+  background: yellow;
+  color: #000000;
+}
+
+#report-table tbody tr.delay {
+  background: red;
+  color: #000000;
 }
 
 .summary-lists {
@@ -222,7 +248,7 @@ input {
 }
 
 #company-information .status.complete {
-  background: greenyellow;
+  background: green;
   color: #000000;
 }
 

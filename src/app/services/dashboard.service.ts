@@ -37,6 +37,7 @@ export interface CompanyData {
     PRODUCT_NAME: string;
     VDB_QTY: number;
     VDB_UM: string;
+    VDB_STATUS: string;
   }>;
   totalPages: number;
   currentPage: number;

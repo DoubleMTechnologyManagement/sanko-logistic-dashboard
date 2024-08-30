@@ -23,6 +23,12 @@ export class InboundComponent implements OnInit, OnDestroy {
   setTimeRefreshNextPage: number = 10000;
   itemsPerPage: number = 10;
   currentCompanyIndex: number = 0;
+  totalCount: number = 0;
+  waitCount: number = 0;
+  waitCCount: number = 0;
+  delayCount: number = 0;
+  completeCount: number = 0;
+  cancelCount: number = 0;
 
   constructor(
     private apiService: DashboardService,
@@ -65,6 +71,7 @@ export class InboundComponent implements OnInit, OnDestroy {
     const apiSubscription = this.apiService.getEmployee().subscribe({
       next: (data) => {
         const result = data.filter((item: VdbDet) => item.VDB_TYPE === 'SDT->VD');
+        this.calculateTotalCount(result);
         this.groupDataByCompanyAndTime(result);
         this.resetPagination();
         this.updatePaginatedData();
@@ -74,6 +81,15 @@ export class InboundComponent implements OnInit, OnDestroy {
       },
     });
     this.subscription.add(apiSubscription);
+  }
+
+  calculateTotalCount(result: VdbDet[]) {
+    this.totalCount = result.length;
+    this.waitCount = result.filter(item => item.VDB_STATUS === '1').length;
+    this.waitCCount = result.filter(item => item.VDB_STATUS === '2').length;
+    this.completeCount = result.filter(item => item.VDB_STATUS === '3').length;
+    this.delayCount = result.filter(item => item.VDB_STATUS === '4').length;
+    this.cancelCount = result.filter(item => item.VDB_STATUS === '5').length;
   }
 
   groupDataByCompanyAndTime(data: VdbDet[]) {
@@ -97,7 +113,8 @@ export class InboundComponent implements OnInit, OnDestroy {
             VDB_ITEM: item.VDB_ITEM,
             PRODUCT_NAME: item.PRODUCT_NAME,
             VDB_QTY: item.VDB_QTY,
-            VDB_UM: item.VDB_UM
+            VDB_UM: item.VDB_UM,
+            VDB_STATUS: item.VDB_STATUS
         });
     });
 

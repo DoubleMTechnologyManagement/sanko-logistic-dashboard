@@ -6,8 +6,34 @@
         <div>{{ timer | date : "dd/MM/yyyy hh:mm:ss" }}</div>
       </div>
       <div class="report-body">
+        <div class="summary-lists">
+          <div class="summary-item">
+            <div class="title">Total</div>
+            <div class="count-box black-bg">{{ totalCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Wait</div>
+            <div class="count-box blue-bg">{{ waitCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Wait(C)</div>
+            <div class="count-box orange-bg">{{ waitCCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Complete</div>
+            <div class="count-box green-bg">{{ completeCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Delay</div>
+            <div class="count-box red-bg">{{ delayCount }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Cancel</div>
+            <div class="count-box cancel-bg">{{ cancelCount }}</div>
+          </div>
+        </div>
+        
         <div id="company-information" *ngIf="allCompaniesData.length">
-
           <div *ngIf="currentCompany" class="container">
             <div class="company-name">บริษัท</div>
             <div class="value">{{ currentCompany.VDB_COMP }}</div>
@@ -54,7 +80,14 @@
           </thead>
           <tbody>
             <tr
-              *ngFor="let item of paginatedData"
+            *ngFor="let item of paginatedData"
+            [ngClass]="{
+              'wait': item.VDB_STATUS === '1',
+              'waitc': item.VDB_STATUS === '2',
+              'complete': item.VDB_STATUS === '3',
+              'delay': item.VDB_STATUS === '4',
+              'cancel': item.VDB_STATUS === '5'
+            }"
             >
               <td class="">{{ item.VDB_ITEM }}</td>
               <td class="">{{ item.PRODUCT_NAME }}</td>
