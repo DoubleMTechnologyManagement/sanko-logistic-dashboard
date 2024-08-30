@@ -13,6 +13,7 @@ class dashboard {
     vdb_type,
     vdb_nbr,
     vdb_comp,
+    VDB_DATE,
     TO_CHAR(vdb_date, 'HH24.MI') AS display_time,
     vdb_effdate,
     vdb_driver,

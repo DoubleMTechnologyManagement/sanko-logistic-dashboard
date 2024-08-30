@@ -65,7 +65,6 @@ export class InboundComponent implements OnInit, OnDestroy {
     const apiSubscription = this.apiService.getEmployee().subscribe({
       next: (data) => {
         const result = data.filter((item: VdbDet) => item.VDB_TYPE === 'SDT->VD');
-        console.log("KAE result", result);
         this.groupDataByCompanyAndTime(result);
         this.resetPagination();
         this.updatePaginatedData();
@@ -118,7 +117,6 @@ export class InboundComponent implements OnInit, OnDestroy {
   }
 
   updatePaginatedData() {
-    console.log("KAE this.allCompaniesData", this.allCompaniesData);
     if (this.allCompaniesData.length > 0) {
         let pageIndex = this.currentPage;
         let accumulatedPages = 0;
