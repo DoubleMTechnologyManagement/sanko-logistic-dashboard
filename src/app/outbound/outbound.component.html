@@ -80,7 +80,7 @@
           </thead>
           <tbody>
             <tr
-            *ngFor="let item of paginatedData"
+            *ngFor="let item of paginatedData; let i = index"
             [ngClass]="{
               'wait': item.VDB_STATUS === '1',
               'waitc': item.VDB_STATUS === '2',
@@ -89,13 +89,14 @@
               'cancel': item.VDB_STATUS === '5'
             }"
             >
+              <td class="text-center">{{ i + 1 }}</td>
               <td class="">{{ item.VDB_ITEM }}</td>
               <td class="">{{ item.PRODUCT_NAME }}</td>
               <td class="text-center">{{ item.VDB_QTY | number }}</td>
               <td class="text-center">{{ item.VDB_UM }}</td>
             </tr>
             <tr *ngIf="totalPages > 0">
-              <td class="h-5 h2 text-center page" colspan="4">
+              <td class="h-5 h2 text-center page" colspan="5">
                   Page {{ currentPage + 1 }}/{{ totalPages }}
               </td>
           </tr>

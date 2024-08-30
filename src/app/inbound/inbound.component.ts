@@ -71,7 +71,6 @@ export class InboundComponent implements OnInit, OnDestroy {
     const apiSubscription = this.apiService.getEmployee().subscribe({
       next: (data) => {
         const result = data.filter((item: VdbDet) => item.VDB_TYPE === 'SDT->VD');
-        this.calculateTotalCount(result);
         this.groupDataByCompanyAndTime(result);
         this.resetPagination();
         this.updatePaginatedData();
@@ -83,7 +82,7 @@ export class InboundComponent implements OnInit, OnDestroy {
     this.subscription.add(apiSubscription);
   }
 
-  calculateTotalCount(result: VdbDet[]) {
+  calculateTotalCount(result: CompanyData[]) {
     this.totalCount = result.length;
     this.waitCount = result.filter(item => item.VDB_STATUS === '1').length;
     this.waitCCount = result.filter(item => item.VDB_STATUS === '2').length;
@@ -124,6 +123,7 @@ export class InboundComponent implements OnInit, OnDestroy {
         company.totalPages = Math.ceil(company.items.length / this.itemsPerPage);
         this.totalPages += company.totalPages; 
     });
+    this.calculateTotalCount(this.allCompaniesData);
   }
 
   resetPagination() {

@@ -4,20 +4,23 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { InboundComponent } from './inbound/inbound.component';
 import { OutboundComponent } from './outbound/outbound.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { LoadingComponent } from './loading/loading.component';
+import { LoadingInterceptor } from './services/loading-interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     InboundComponent,
-    OutboundComponent
+    OutboundComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [ { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

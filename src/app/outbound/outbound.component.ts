@@ -72,7 +72,6 @@ export class OutboundComponent {
       next: (data) => {
         const result = data.filter((item: VdbDet) => item.VDB_TYPE === 'VD->SDT');
         this.groupDataByCompanyAndTime(result);
-        this.calculateTotalCount(result);
         this.resetPagination();
         this.updatePaginatedData();
       },
@@ -83,7 +82,7 @@ export class OutboundComponent {
     this.subscription.add(apiSubscription);
   }
 
-  calculateTotalCount(result: VdbDet[]) {
+  calculateTotalCount(result: CompanyData[]) {
     this.totalCount = result.length;
     this.waitCount = result.filter(item => item.VDB_STATUS === '1').length;
     this.waitCCount = result.filter(item => item.VDB_STATUS === '2').length;
@@ -124,6 +123,7 @@ export class OutboundComponent {
         company.totalPages = Math.ceil(company.items.length / this.itemsPerPage);
         this.totalPages += company.totalPages; 
     });
+    this.calculateTotalCount(this.allCompaniesData);
   }
 
   resetPagination() {
