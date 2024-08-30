@@ -42,10 +42,7 @@ WHERE
     TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr')
 ORDER BY 
     vdb_status,
-    CASE 
-        WHEN REGEXP_LIKE(TO_CHAR(vdb_date, 'HH24:MI'), '^\d{2}:\d{2}$') THEN TO_CHAR(vdb_date, 'HH24:MI')
-        ELSE TO_CHAR(vdb_date, 'HH24.MI')
-    END, 
+    TO_CHAR(vdb_date, 'HH24.MI'), 
     vdb_nbr"; 
 
     $objParse = oci_parse($this->conn, $sql);

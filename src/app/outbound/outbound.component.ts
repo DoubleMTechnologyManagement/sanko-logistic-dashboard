@@ -97,9 +97,28 @@ export class OutboundComponent {
     this.cancelCount = result.filter(item => item.VDB_STATUS === '5').length;
   }
 
+  normalizeDisplayTime(displayTime: string): string {
+    if (/^\d{2}\.\d{2}$/.test(displayTime)) {
+      const [hours, fractionalMinutes] = displayTime.split('.').map(Number);
+      const minutes = Math.round(fractionalMinutes * 0.6);
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    }
+    
+    const [hours, fractionalMinutes] = displayTime.split('.').map(Number);
+    const minutes = Math.round(fractionalMinutes * 0.6); 
+  
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  }
+
   groupDataByCompanyAndTime(data: VdbDet[]) {
     const companyMap: { [key: string]: CompanyData } = {};
 
+    data.sort((a, b) => {
+      const timeA = this.normalizeDisplayTime(a.DISPLAY_TIME);
+      const timeB = this.normalizeDisplayTime(b.DISPLAY_TIME);
+      return timeA.localeCompare(timeB);
+    });
+    
     data.forEach(item => {
         const groupKey = `${item.VDB_COMP}-${item.DISPLAY_TIME}`;
         if (!companyMap[groupKey]) {
