@@ -32,7 +32,7 @@
             <div class="count-box cancel-bg">{{ cancelCount }}</div>
           </div>
         </div>
-        
+
         <div id="company-information" *ngIf="allCompaniesData.length">
           <div *ngIf="currentCompany" class="container">
             <div class="company-name">บริษัท</div>
@@ -122,6 +122,33 @@
         <div>{{ timer | date : "dd/MM/yyyy hh:mm:ss" }}</div>
       </div>
       <div class="report-body">
+        <div class="summary-lists">
+            <div class="summary-item">
+              <div class="title">Total</div>
+              <div class="count-box black-bg"> 0 </div>
+            </div>
+            <div class="summary-item">
+              <div class="title">Wait</div>
+              <div class="count-box blue-bg">0</div>
+            </div>
+            <div class="summary-item">
+              <div class="title">Wait(C)</div>
+              <div class="count-box orange-bg">0</div>
+            </div>
+            <div class="summary-item">
+              <div class="title">Complete</div>
+              <div class="count-box green-bg">0</div>
+            </div>
+            <div class="summary-item">
+              <div class="title">Delay</div>
+              <div class="count-box red-bg">0</div>
+            </div>
+            <div class="summary-item">
+              <div class="title">Cancel</div>
+              <div class="count-box cancel-bg">0</div>
+            </div>
+        </div>
+
         <table id="report-table" class="">
           <thead>
             <tr>
