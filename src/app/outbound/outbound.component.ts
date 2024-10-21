@@ -21,7 +21,7 @@ export class OutboundComponent {
   timer: Date = new Date();
   setTime: number = 30000;
   setTimeRefreshNextPage: number = 10000;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 5;
   currentCompanyIndex: number = 0;
   totalCount: number = 0;
   waitCount: number = 0;
