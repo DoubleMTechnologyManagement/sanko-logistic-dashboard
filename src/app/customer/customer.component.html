@@ -2,7 +2,7 @@
     <div class="col-12">
       <div id="report">
         <div class="report-header">
-          <div>ตารางแสดงเวลาจัดส่งชิ้นงานจาก SANKO -> VENDOR</div>
+          <div>ตารางแสดงเวลาจัดส่งชิ้นงานจาก SANKO -> CUSTOMER</div>
           <div>{{ timer | date : "dd/MM/yyyy hh:mm:ss" }}</div>
         </div>
         <div class="report-body">
@@ -113,9 +113,9 @@
         <div class="report-footer">
           <div>เลือกหน้า</div>
           <div class="page-select">
-            <a routerLink="/" class="button-link acitve">SANKO -> VENDOR </a>
+            <a routerLink="/" class="button-link">SANKO -> VENDOR </a>
             <a routerLink="/outbound" class="button-link">VENDOR -> SANKO </a>
-            <a routerLink="/customer" class="button-link">SANKO -> CUSTOMER </a>
+            <a routerLink="/customer" class="button-link acitve">SANKO -> CUSTOMER </a>
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@
     <div class="col-12">
       <div id="report">
         <div class="report-header">
-          <div>ตารางแสดงเวลาจัดส่งชิ้นงานจาก VENDOR -> SANKO</div>
+          <div>ตารางแสดงเวลาจัดส่งชิ้นงานจาก CUSTOMER -> SANKO</div>
           <div>{{ timer | date : "dd/MM/yyyy hh:mm:ss" }}</div>
         </div>
         <div class="report-body">
@@ -181,9 +181,9 @@
         <div class="report-footer">
           <div>เลือกหน้า</div>
           <div class="page-select">
-            <a routerLink="/" class="button-link acitve">SANKO -> VENDOR </a>
+            <a routerLink="/" class="button-link">SANKO -> VENDOR </a>
             <a routerLink="/outbound" class="button-link">VENDOR -> SANKO </a>
-            <a routerLink="/customer" class="button-link">SANKO -> CUSTOMER </a>
+            <a routerLink="/customer" class="button-link acitve">SANKO -> CUSTOMER </a>
           </div>
         </div>
       </div>

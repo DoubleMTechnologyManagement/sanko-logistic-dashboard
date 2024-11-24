@@ -17,6 +17,12 @@ export class DashboardService {
     });
   }
 
+  getCustomer(): Observable<VdbDet[]> {
+    return this.httpClient.post<VdbDet[]>(this.API_URL, {
+      mod: 'customerData'
+    });
+  }
+
   getSetTime(): Observable<SetTime> {
     return this.httpClient.post<SetTime>(this.API_URL, {
       mod: 'setTime'

@@ -270,3 +270,32 @@ input {
   background: red;
   color: #FFFFFF;
 }
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.container-pagination {
+  display: flex;
+  height: 56px;
+  justify-content: space-between;
+  font-size: 40px  !important;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #2d2d2d;
+  padding: 10px;
+  padding-right: 10px;
+}
+
+.page-select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 20px !important;
+}

@@ -7,13 +7,15 @@ import { OutboundComponent } from './outbound/outbound.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoadingComponent } from './loading/loading.component';
 import { LoadingInterceptor } from './services/loading-interceptor';
+import { CustomerComponent } from './customer/customer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InboundComponent,
     OutboundComponent,
-    LoadingComponent
+    LoadingComponent,
+    CustomerComponent
   ],
   imports: [
     BrowserModule,
