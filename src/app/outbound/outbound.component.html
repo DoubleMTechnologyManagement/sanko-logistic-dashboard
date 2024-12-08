@@ -1,4 +1,4 @@
- <div class="row" *ngIf="currentCompany && paginatedData.length > 0; else noDataTemplate">
+<div class="row" *ngIf="currentCompany && paginatedData.length > 0; else noDataTemplate">
   <div class="col-12">
     <div id="report">
       <div class="report-header">
@@ -34,6 +34,7 @@
         </div>
 
         <div id="company-information" *ngIf="allCompaniesData.length">
+
           <div *ngIf="currentCompany" class="container">
             <div class="company-name">บริษัท</div>
             <div class="value">{{ currentCompany.VDB_COMP }}</div>
@@ -76,6 +77,7 @@
         <table id="report-table" class="">
           <thead>
             <tr>
+              <th class="text-center">ลำดับ</th>
               <th class="text-center">สินค้า</th>
               <th class="">ชื่อสินค้า</th>
               <th class="text-center">จำนวน</th>
@@ -84,16 +86,16 @@
           </thead>
           <tbody>
             <tr
-            *ngFor="let item of paginatedData; let i = index"
-            [ngClass]="{
-              'wait': item.VDB_STATUS === '1',
-              'waitc': item.VDB_STATUS === '2',
-              'complete': item.VDB_STATUS === '3',
-              'delay': item.VDB_STATUS === '4',
-              'cancel': item.VDB_STATUS === '5'
-            }"
+              *ngFor="let item of paginatedData; let i = index"
+              [ngClass]="{
+                'wait': item.VDB_STATUS === '1',
+                'waitc': item.VDB_STATUS === '2',
+                'complete': item.VDB_STATUS === '3',
+                'delay': item.VDB_STATUS === '4',
+                'cancel': item.VDB_STATUS === '5'
+              }"
             >
-              <td class="text-center">{{ i + 1 }}</td>
+             <td class="text-center">{{ i + 1 }}</td>
               <td class="">{{ item.VDB_ITEM }}</td>
               <td class="">{{ item.PRODUCT_NAME }}</td>
               <td class="text-center">{{ item.VDB_QTY | number }}</td>
@@ -109,15 +111,15 @@
       </div>
       <div class="report-footer">
         <div>เลือกหน้า</div>
-        <div class="page-select">
-          <a routerLink="/" class="button-link">SANKO -> VENDOR </a>
+        <div>
+          <a routerLink="/" class="button-link ">SANKO -> VENDOR</a>
           <a routerLink="/outbound" class="button-link acitve">VENDOR -> SANKO </a>
-          <a routerLink="/customer" class="button-link">SANKO -> CUSTOMER </a>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- No Data Template -->
 <ng-template #noDataTemplate>
@@ -128,32 +130,33 @@
         <div>{{ timer | date : "dd/MM/yyyy hh:mm:ss" }}</div>
       </div>
       <div class="report-body">
+
         <div class="summary-lists">
-            <div class="summary-item">
-              <div class="title">Total</div>
-              <div class="count-box black-bg"> 0 </div>
-            </div>
-            <div class="summary-item">
-              <div class="title">Wait</div>
-              <div class="count-box blue-bg">0</div>
-            </div>
-            <div class="summary-item">
-              <div class="title">Wait(C)</div>
-              <div class="count-box orange-bg">0</div>
-            </div>
-            <div class="summary-item">
-              <div class="title">Complete</div>
-              <div class="count-box green-bg">0</div>
-            </div>
-            <div class="summary-item">
-              <div class="title">Delay</div>
-              <div class="count-box red-bg">0</div>
-            </div>
-            <div class="summary-item">
-              <div class="title">Cancel</div>
-              <div class="count-box cancel-bg">0</div>
-            </div>
-        </div>
+          <div class="summary-item">
+            <div class="title">Total</div>
+            <div class="count-box black-bg"> 0 </div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Wait</div>
+            <div class="count-box blue-bg">0</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Wait(C)</div>
+            <div class="count-box orange-bg">0</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Complete</div>
+            <div class="count-box green-bg">0</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Delay</div>
+            <div class="count-box red-bg">0</div>
+          </div>
+          <div class="summary-item">
+            <div class="title">Cancel</div>
+            <div class="count-box cancel-bg">0</div>
+          </div>
+      </div>
 
         <table id="report-table" class="">
           <thead>
@@ -175,10 +178,9 @@
       </div>
       <div class="report-footer">
         <div>เลือกหน้า</div>
-        <div class="page-select">
+        <div>
           <a routerLink="/" class="button-link">SANKO -> VENDOR </a>
           <a routerLink="/outbound" class="button-link acitve">VENDOR -> SANKO </a>
-          <a routerLink="/customer" class="button-link">SANKO -> CUSTOMER </a>
         </div>
       </div>
     </div>
