@@ -69,9 +69,12 @@ export interface CompanyData {
     VDB_QTY: number;
     VDB_UM: string;
     VDB_STATUS: string;
+    orderNumber: number;
   }>;
   totalPages: number;
   currentPage: number;
+  currentLine: number;
+  totalLine: number;
 }
 
 export interface VdbDet {

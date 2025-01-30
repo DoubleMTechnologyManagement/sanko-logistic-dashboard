@@ -12,6 +12,8 @@ export class CustomerComponent {
   currentCompany: CompanyData | null = null;
   currentPage: number = 0;
   totalPages: number = 0;
+  currentLine: number = 0;
+  totalLine: number = 0;
   paginatedData: CompanyData['items'] = [];
   intervalSchedule: any;
   intervalDateTime: any;
@@ -72,10 +74,11 @@ export class CustomerComponent {
   }
 
   callApi() {
-    const apiSubscription = this.apiService.getEmployee().subscribe({
+    const apiSubscription = this.apiService.getCustomer().subscribe({
       next: (data) => {
-        const result = data.filter((item: VdbDet) => item.VDB_TYPE === 'SDT->CM');
-        this.groupDataByCompanyAndTime(result);
+        // const result = data.filter(item => item.VDB_NBR === 'PK25000464');
+        console.log('API Result:', data);
+        this.groupDataByCompanyAndTime(data);
         this.resetPagination();
         this.updatePaginatedData();
       },
@@ -108,6 +111,16 @@ export class CustomerComponent {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
   }
 
+  normalizeString(input: string): string {
+    return input
+    .trim() 
+    .replace(/\s+/g, ' ') 
+    .replace(/\s*([\(\)])\s*/g, '$1') 
+    .replace(/\s*,\s*/g, ',')
+    .replace(/\.$/, '')
+    .toUpperCase();
+  }
+
   groupDataByCompanyAndTime(data: VdbDet[]) {
     const companyMap: { [key: string]: CompanyData } = {};
 
@@ -118,7 +131,12 @@ export class CustomerComponent {
     });
 
     data.forEach(item => {
-        const groupKey = `${item.VDB_COMP}-${item.DISPLAY_TIME}`;
+        const companyName = this.normalizeString(item.VDB_COMP);
+        const VDB_NBR = this.normalizeString(item.VDB_NBR);
+        const productName = this.normalizeString(item.PRODUCT_NAME);
+        const productItem = this.normalizeString(item.VDB_ITEM);
+        const groupKey = this.normalizeString(`${companyName}-${VDB_NBR}-${item.DISPLAY_TIME}`);
+        console.log('Group Key:', groupKey);
         if (!companyMap[groupKey]) {
             companyMap[groupKey] = {
                 VDB_COMP: item.VDB_COMP,
@@ -130,16 +148,32 @@ export class CustomerComponent {
                 VDB_DATE: item.VDB_DATE,
                 items: [],
                 totalPages: 1,
-                currentPage: 0
+                currentPage: 0,
+                currentLine: 0,
+                totalLine: 0
             };
         }
-        companyMap[groupKey].items.push({
-            VDB_ITEM: item.VDB_ITEM,
-            PRODUCT_NAME: item.PRODUCT_NAME,
-            VDB_QTY: item.VDB_QTY,
-            VDB_UM: item.VDB_UM,
-            VDB_STATUS: item.VDB_STATUS
-        });
+
+        // Check for duplicate items
+          const isDuplicate = companyMap[groupKey].items.some(existingItem => 
+            this.normalizeString(existingItem.VDB_ITEM) === productItem &&
+            this.normalizeString(existingItem.PRODUCT_NAME) === productName &&
+            existingItem.VDB_QTY === item.VDB_QTY &&
+            this.normalizeString(existingItem.VDB_UM) === this.normalizeString(item.VDB_UM) &&
+            this.normalizeString(existingItem.VDB_STATUS) === this.normalizeString(item.VDB_STATUS)
+        );
+
+        if (!isDuplicate) {
+            companyMap[groupKey].items.push({
+              orderNumber: companyMap[groupKey].items.length + 1,
+              VDB_ITEM: item.VDB_ITEM,
+              PRODUCT_NAME: item.PRODUCT_NAME,
+              VDB_QTY: item.VDB_QTY,
+              VDB_UM: item.VDB_UM,
+              VDB_STATUS: item.VDB_STATUS
+            });
+        }
+        console.log('Company Map:', companyMap);
     });
 
     this.allCompaniesData = Object.values(companyMap);
@@ -188,6 +222,7 @@ export class CustomerComponent {
     this.currentCompanyIndex = 0;
     this.allCompaniesData.forEach(company => {
       company.currentPage = 0;
+      company.currentLine = 0;
     });
   }
 
@@ -195,8 +230,10 @@ export class CustomerComponent {
     if (this.allCompaniesData.length > 0) {
         let pageIndex = this.currentPage;
         let accumulatedPages = 0;
-
+        let index = 0;
         for (const company of this.allCompaniesData) {
+            this.totalLine = company.items.length;
+
             const companyPages = Math.ceil(company.items.length / this.itemsPerPage);
             accumulatedPages += companyPages;
 
@@ -206,8 +243,13 @@ export class CustomerComponent {
                 const end = start + this.itemsPerPage;
                 this.paginatedData = company.items.slice(start, end);
                 this.currentCompany = company;
+
+                 const maxLineNumber = Math.min(end, this.totalLine);
+                 this.currentLine =   maxLineNumber;
+
                 break;
             }
+            index++;
         }
     } else {
         this.paginatedData = [];

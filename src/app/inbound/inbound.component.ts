@@ -14,6 +14,8 @@ export class InboundComponent implements OnInit, OnDestroy {
   currentCompany: CompanyData | null = null;
   currentPage: number = 0;
   totalPages: number = 0;
+  currentLine: number = 0;
+  totalLine: number = 0;
   paginatedData: CompanyData['items'] = [];
   intervalSchedule: any;
   intervalDateTime: any;
@@ -132,10 +134,13 @@ export class InboundComponent implements OnInit, OnDestroy {
                 VDB_DATE: item.VDB_DATE,
                 items: [],
                 totalPages: 1,
-                currentPage: 0
+                currentPage: 0,
+                currentLine: 0,
+                totalLine: 0
             };
         }
         companyMap[groupKey].items.push({
+            orderNumber: companyMap[groupKey].items.length + 1,
             VDB_ITEM: item.VDB_ITEM,
             PRODUCT_NAME: item.PRODUCT_NAME,
             VDB_QTY: item.VDB_QTY,
@@ -190,6 +195,7 @@ export class InboundComponent implements OnInit, OnDestroy {
     this.currentCompanyIndex = 0;
     this.allCompaniesData.forEach(company => {
       company.currentPage = 0;
+      company.currentLine = 0;
     });
   }
 
@@ -197,8 +203,10 @@ export class InboundComponent implements OnInit, OnDestroy {
     if (this.allCompaniesData.length > 0) {
         let pageIndex = this.currentPage;
         let accumulatedPages = 0;
-
+        let index = 0;
         for (const company of this.allCompaniesData) {
+            this.totalLine = company.items.length;
+
             const companyPages = Math.ceil(company.items.length / this.itemsPerPage);
             accumulatedPages += companyPages;
 
@@ -208,8 +216,13 @@ export class InboundComponent implements OnInit, OnDestroy {
                 const end = start + this.itemsPerPage;
                 this.paginatedData = company.items.slice(start, end);
                 this.currentCompany = company;
+
+                 const maxLineNumber = Math.min(end, this.totalLine);
+                 this.currentLine =   maxLineNumber;
+
                 break;
             }
+            index++;
         }
     } else {
         this.paginatedData = [];

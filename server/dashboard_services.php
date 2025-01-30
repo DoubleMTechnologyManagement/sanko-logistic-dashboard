@@ -9,51 +9,98 @@ class dashboard {
   }
 
   public function scheduleData(){
-    $sql = "SELECT 
-    vdb_type,
-    vdb_nbr,
-    vdb_comp,
-    VDB_DATE,
-    TO_CHAR(vdb_date, 'HH24.MI') AS display_time,
-    vdb_effdate,
-    vdb_driver,
-    vdb_car,
-    vdb_item,
-    vdb_qty,
-    vdb_um,
-    vdb_status,
-    vdb_rmks,
-    vdb_user,
-    vdb_chr01,
-    vdb_chr02,
-    vdb_chr03,
-    vdb_num01,
-    vdb_num02,
-    vdb_num03,
-    vdb_date01,
-    vdb_date02,
-    vdb_date03,
-    pt_mstr.pt_desc1 AS PRODUCT_NAME
-FROM 
-    vdb_det
-JOIN 
-    pt_mstr ON vdb_det.vdb_item = pt_mstr.pt_part 
-WHERE 
-    TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr')
-ORDER BY 
-    vdb_status,
-    TO_CHAR(vdb_date, 'HH24.MI'), 
-    vdb_nbr"; 
+      $sql = "SELECT 
+      vdb_type,
+      vdb_nbr,
+      vdb_comp,
+      VDB_DATE,
+      TO_CHAR(vdb_date, 'HH24.MI') AS display_time,
+      vdb_effdate,
+      vdb_driver,
+      vdb_car,
+      vdb_item,
+      vdb_qty,
+      vdb_um,
+      vdb_status,
+      vdb_rmks,
+      vdb_user,
+      vdb_chr01,
+      vdb_chr02,
+      vdb_chr03,
+      vdb_num01,
+      vdb_num02,
+      vdb_num03,
+      vdb_date01,
+      vdb_date02,
+      vdb_date03,
+      pt_mstr.pt_desc1 AS PRODUCT_NAME
+  FROM 
+      vdb_det
+  JOIN 
+      pt_mstr ON vdb_det.vdb_item = pt_mstr.pt_part 
+  WHERE 
+      TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr')
+  ORDER BY 
+      vdb_status,
+      TO_CHAR(vdb_date, 'HH24.MI'), 
+      vdb_nbr"; 
 
-    $objParse = oci_parse($this->conn, $sql);
-    oci_execute($objParse, OCI_DEFAULT);
-    $result = array();
-    while ($row = oci_fetch_assoc($objParse)) {
-        $result[] = $row;
-    }
-    oci_free_statement($objParse);
-    return $result;
-}
+      $objParse = oci_parse($this->conn, $sql);
+      oci_execute($objParse, OCI_DEFAULT);
+      $result = array();
+      while ($row = oci_fetch_assoc($objParse)) {
+          $result[] = $row;
+      }
+      oci_free_statement($objParse);
+      return $result;
+  }
+
+  public function customerData(){
+      $sql = "SELECT 
+      vdb_type,
+      vdb_nbr,
+      vdb_comp,
+      VDB_DATE,
+      TO_CHAR(vdb_date, 'HH24.MI') AS display_time,
+      vdb_effdate,
+      vdb_driver,
+      vdb_car,
+      vdb_item,
+      vdb_qty,
+      vdb_um,
+      vdb_status,
+      vdb_rmks,
+      vdb_user,
+      vdb_chr01,
+      vdb_chr02,
+      vdb_chr03,
+      vdb_num01,
+      vdb_num02,
+      vdb_num03,
+      vdb_date01,
+      vdb_date02,
+      vdb_date03,
+      pt_mstr.pt_desc1 AS PRODUCT_NAME
+  FROM 
+      vdb_det
+  JOIN 
+      pt_mstr ON vdb_det.vdb_item = pt_mstr.pt_part 
+  WHERE 
+      TO_DATE(vdb_effdate, 'dd/mm/rr') = TO_DATE(SYSDATE, 'dd/mm/rr') and vdb_type = 'SDT->CM' 
+  ORDER BY 
+      vdb_status,
+      TO_CHAR(vdb_date, 'HH24.MI'), 
+      vdb_nbr"; 
+
+      $objParse = oci_parse($this->conn, $sql);
+      oci_execute($objParse, OCI_DEFAULT);
+      $result = array();
+      while ($row = oci_fetch_assoc($objParse)) {
+          $result[] = $row;
+      }
+      oci_free_statement($objParse);
+      return $result;
+  }
 
   public function setTime(){
     $sql = "SELECT WOC_VD_IN, WOC_VD_OUT, WOC_VD_DELAY 

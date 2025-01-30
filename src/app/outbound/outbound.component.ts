@@ -132,10 +132,13 @@ export class OutboundComponent {
                 VDB_DATE: item.VDB_DATE,
                 items: [],
                 totalPages: 1,
-                currentPage: 0
+                currentPage: 0,
+                currentLine: 0,
+                totalLine: 0
             };
         }
         companyMap[groupKey].items.push({
+            orderNumber: companyMap[groupKey].items.length + 1,
             VDB_ITEM: item.VDB_ITEM,
             PRODUCT_NAME: item.PRODUCT_NAME,
             VDB_QTY: item.VDB_QTY,

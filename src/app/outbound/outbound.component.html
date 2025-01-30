@@ -95,7 +95,7 @@
                 'cancel': item.VDB_STATUS === '5'
               }"
             >
-             <td class="text-center">{{ i + 1 }}</td>
+              <td class="text-center">{{ item.orderNumber }}</td>
               <td class="">{{ item.VDB_ITEM }}</td>
               <td class="">{{ item.PRODUCT_NAME }}</td>
               <td class="text-center">{{ item.VDB_QTY | number }}</td>
@@ -114,6 +114,7 @@
         <div>
           <a routerLink="/" class="button-link ">SANKO -> VENDOR</a>
           <a routerLink="/outbound" class="button-link acitve">VENDOR -> SANKO </a>
+          <a routerLink="/customer" class="button-link">SANKO -> CUSTOMER </a>
         </div>
       </div>
     </div>
@@ -178,9 +179,10 @@
       </div>
       <div class="report-footer">
         <div>เลือกหน้า</div>
-        <div>
+        <div class="page-select">
           <a routerLink="/" class="button-link">SANKO -> VENDOR </a>
           <a routerLink="/outbound" class="button-link acitve">VENDOR -> SANKO </a>
+          <a routerLink="/customer" class="button-link">SANKO -> CUSTOMER </a>
         </div>
       </div>
     </div>
