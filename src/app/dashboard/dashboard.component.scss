@@ -1,0 +1,121 @@
+.dashboard-fullscreen-grid-container {
+  width: 100vw;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #fffbe7;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-datetime {
+  position: absolute;
+  top: 2px;
+  right: 30px;
+  font-size: 1.2vw;
+  font-weight: bold;
+  color: #222;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  z-index: 10;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 0.4fr 0.6fr;
+  grid-gap: 8px 0;
+  width: calc(100vw - 64px);
+  height: calc(100vh - 80px);
+  margin: 50px auto 0 auto;
+  border-radius: 12px;
+  background: #fffbe7;
+  box-sizing: border-box;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.grid-label, .grid-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+}
+
+.grid-label {
+  font-size: 4.5vw;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #222;
+}
+.grid-value {
+  font-size: 5vw;
+  font-weight: bold;
+  color: #111;
+}
+
+.assembly.grid-label {
+  background: #cfd8dc;
+}
+.painting.grid-label {
+  background: #ffe0b2;
+}
+.metal.grid-label {
+  background: #c8e6c9;
+}
+.assembly.grid-value {
+  background: #b0b3b6;
+}
+.painting.grid-value {
+  background: #ffd6b2;
+}
+.metal.grid-value {
+  background: #b7e6b7;
+}
+
+@media (max-width: 900px) {
+  .dashboard-datetime {
+    font-size: 2.8vw;
+    padding: 6px 10px;
+    top: 10px;
+    right: 10px;
+  }
+  .dashboard-grid {
+    width: calc(100vw - 16px);
+    height: calc(100vh - 32px);
+    margin: 12px auto 0 auto;
+    border-width: 5px;
+  }
+  .grid-label {
+    font-size: 2.5vw;
+  }
+  .grid-value {
+    font-size: 8vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-grid {
+    grid-template-rows: 0.4fr 0.6fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100vw;
+    height: 60vh;
+    margin: 8px auto 0 auto;
+    border-width: 3px;
+  }
+  .grid-label {
+    font-size: 4.5vw;
+  }
+  .grid-value {
+    font-size: 12vw;
+  }
+}

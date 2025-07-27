@@ -1,0 +1,11 @@
+<div class="dashboard-fullscreen-grid-container">
+  <div class="dashboard-datetime">{{ currentTime | date:'dd/MM/yyyy - HH:mm:ss' }}</div>
+  <div class="dashboard-grid">
+    <div class="grid-label assembly">ASSEMBLY</div>
+    <div class="grid-label painting">PAINTING</div>
+    <div class="grid-label metal">METAL</div>
+    <div class="grid-value assembly">{{ dashboardData.stats.assembly }}</div>
+    <div class="grid-value painting">{{ dashboardData.stats.painting }}</div>
+    <div class="grid-value metal">{{ dashboardData.stats.metal }}</div>
+  </div>
+</div>

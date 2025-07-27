@@ -1,0 +1,80 @@
+<div class="production-dashboard">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="header-left">
+      <div class="assembly-selector">
+        <span class="assembly-label">Assembly # {{ productionData.assembly }}</span>
+        <span class="dropdown-arrow">▼</span>
+      </div>
+      
+      <div class="status-indicators">
+        <div class="status-item finish">
+          <span class="status-dot"></span>
+          <span class="status-text">Finish</span>
+        </div>
+        <div class="status-item work">
+          <span class="status-dot"></span>
+          <span class="status-text">Work</span>
+        </div>
+        <div class="status-item not-work">
+          <span class="status-dot"></span>
+          <span class="status-text">Not Work</span>
+        </div>
+        <div class="status-item machine-down">
+          <span class="status-dot"></span>
+          <span class="status-text">Machine Down</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="completion-rate">
+        <span class="rate-value">{{ productionData.completionRate }}%</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="timestamp">
+        <div class="timestamp-label">Time Stamp</div>
+        <div class="timestamp-value">: {{ currentTime | date:'HH:mm' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Production Table -->
+  <div class="production-table-container">
+    <table class="production-table">
+      <thead>
+        <tr>
+          <th>LINE</th>
+          <th>JOB</th>
+          <th>ITEM</th>
+          <th>ORDER</th>
+          <th>B/L</th>
+          <th *ngFor="let slot of timeSlots">{{ slot }}</th>
+          <th>O</th>
+          <th>BALANCE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let line of productionData.lines" 
+            [class]="getRowClass(line.status)"
+            [style.border-left]="'4px solid ' + getStatusColor(line.status)">
+          <td>{{ line.id }}</td>
+          <td>{{ line.job }}</td>
+          <td>{{ line.item }}</td>
+          <td>{{ line.order }}</td>
+          <td>{{ line.bl }}</td>
+          <td *ngFor="let slot of line.timeSlots">{{ slot }}</td>
+          <td>0</td>
+          <td>{{ line.balance }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Screen Navigation -->
+  <!-- <div class="screen-navigation">
+    <span>หน้าจอ SCREEN {{ productionData.currentScreen }} เลือก Line {{ productionData.selectedLines }}</span>
+  </div> -->
+</div>
