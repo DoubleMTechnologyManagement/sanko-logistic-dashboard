@@ -2,18 +2,20 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { InboundComponent } from './inbound/inbound.component';
+import { OutboundComponent } from './outbound/outbound.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoadingComponent } from './loading/loading.component';
 import { LoadingInterceptor } from './services/loading-interceptor';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { DashboardViewComponent } from './dashboard-view/dashboard-view.component';
+import { CustomerComponent } from './customer/customer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    InboundComponent,
+    OutboundComponent,
     LoadingComponent,
-    DashboardComponent,
-    DashboardViewComponent
+    CustomerComponent
   ],
   imports: [
     BrowserModule,
