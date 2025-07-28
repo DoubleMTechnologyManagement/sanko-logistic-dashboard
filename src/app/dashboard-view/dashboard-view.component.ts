@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { DashboardService, ProductionDashboardData, ProductionLine } from '../services/dashboard.service';
 import { interval, Subscription } from 'rxjs';
 
@@ -64,38 +63,16 @@ export class DashboardViewComponent implements OnInit, OnDestroy {
     currentScreen: 2
   };
 
-  // Stats from route parameters
-  statsData = {
-    value: 0,
-    statType: ''
-  };
-
   currentTime = new Date();
   timeSlots = ['8-9', '9-10', '10-11', '11-12', 'B', '13-14', '14-15', '15-16', '16-17', '17-18'];
   
   private subscription?: Subscription;
 
-  constructor(
-    private dashboardService: DashboardService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
     this.updateTime();
     this.calculateCompletionRate();
-    
-    // Get route parameters
-    this.route.params.subscribe(params => {
-      if (params['statType']) {
-        this.statsData.statType = params['statType'];
-        console.log('Received statType:', params['statType']);
-      }
-      if (params['value']) {
-        this.statsData.value = +params['value'];
-        console.log('Received value:', params['value']);
-      }
-      console.log('Received stats:', this.statsData);
-    });
     
     // Update time every second
     this.subscription = interval(1000).subscribe(() => {

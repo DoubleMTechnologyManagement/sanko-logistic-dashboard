@@ -49,37 +49,46 @@
   font-family: Arial, sans-serif;
   border: 2px solid #fff;
   box-sizing: border-box;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.grid-label:hover, .grid-value:hover {
-  transform: scale(1.02);
 }
 
 .grid-label {
-  font-size: 4.2vw;
+  font-size: 4.5vw;
   font-weight: bold;
   letter-spacing: 1px;
   color: #222;
 }
 .grid-value {
-  font-size: 6vw;
+  font-size: 5vw;
   font-weight: bold;
   color: #111;
 }
 
-.assembly.grid-label, .assembly.grid-value {
+.assembly.grid-label {
   background: #cfd8dc;
 }
-.painting.grid-label, .painting.grid-value {
+.painting.grid-label {
   background: #ffe0b2;
 }
-.metal.grid-label, .metal.grid-value {
+.metal.grid-label {
   background: #c8e6c9;
+}
+.assembly.grid-value {
+  background: #b0b3b6;
+}
+.painting.grid-value {
+  background: #ffd6b2;
+}
+.metal.grid-value {
+  background: #b7e6b7;
 }
 
 @media (max-width: 900px) {
+  .dashboard-datetime {
+    font-size: 2.8vw;
+    padding: 6px 10px;
+    top: 10px;
+    right: 10px;
+  }
   .dashboard-grid {
     width: calc(100vw - 16px);
     height: calc(100vh - 32px);

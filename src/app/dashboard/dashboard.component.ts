@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 
 interface ProductionLine {
@@ -90,7 +89,7 @@ export class DashboardComponent {
 
   private subscription?: Subscription;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.updateTime();
@@ -156,29 +155,5 @@ export class DashboardComponent {
 
   getRowClass(status: string): string {
     return status.replace('_', '-');
-  }
-
-  // Navigate to dashboard view with stats data
-  navigateToView() {
-    const { assembly, painting, metal } = this.dashboardData.stats;
-    this.router.navigate(['/view', assembly, painting, metal]);
-  }
-
-  // Navigate to dashboard view with stats data (alternative route)
-  navigateToDashboardView() {
-    const { assembly, painting, metal } = this.dashboardData.stats;
-    this.router.navigate(['/dashboard-view', assembly, painting, metal]);
-  }
-
-  // Navigate to view with specific stat
-  navigateToViewWithStat(statType: string, value: number) {
-    console.log(`Navigating to view with ${statType}: ${value}`);
-    
-    // Set default values for other stats
-    const assembly = statType === 'assembly' ? value : this.dashboardData.stats.assembly;
-    const painting = statType === 'painting' ? value : this.dashboardData.stats.painting;
-    const metal = statType === 'metal' ? value : this.dashboardData.stats.metal;
-    
-    this.router.navigate(['/view', statType, value]);
   }
 }
